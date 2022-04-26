@@ -34,6 +34,7 @@ router.post("/login", (req, res) => {
 
 router.post("/SingUp", async (req, res) => {
   let user = await new Task();
+  console.log("user", user);
   user.username = req.body.username;
   user.email = req.body.email;
   user.mobilenumber = req.body.mobilenumber;

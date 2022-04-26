@@ -27,7 +27,12 @@ router.post("/login", (req, res) => {
           success: "false",
           message: "Email and Password are not provided",
         });
-      } else res.json({ success: "true", message: "login successfully" });
+      } else
+        res.json({
+          success: "true",
+          message: "login successfully",
+          data: user,
+        });
     }
   );
 });

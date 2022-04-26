@@ -30,7 +30,7 @@ router.post("/login", (req, res) => {
       } else
         res.json({
           success: "true",
-          message: "login successfully",
+          message: "login is successfully",
           data: user,
         });
     }

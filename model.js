@@ -7,6 +7,7 @@ const dataSchema = mongoose.Schema({
   email: {
     type: String,
     require: true,
+    unique: true,
   },
   mobilenumber: {
     type: Number,

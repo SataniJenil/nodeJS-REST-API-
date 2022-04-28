@@ -39,12 +39,8 @@ router.post("/login", async (req, res) => {
 
 router.post("/register", async (req, res) => {
   try {
-    let valid = {};
-    valid.name = req.body.name;
-    valid.email = req.body.email;
-    valid.phone = req.body.phone;
-    valid.password = req.body.password;
-    let emailExist = await Dom.findOne({ email: req.body.email });
+    const valid = new Task(req.body);
+    let emailExist = await Task.findOne({ email: req.body.email });
     if (emailExist) throw new Error("Email already exist");
     let createData = await Task.create(valid);
     createData && res.send({ success: true, message: "register is done" });
@@ -53,15 +49,11 @@ router.post("/register", async (req, res) => {
   }
 });
 router.put("/user/:id", async (req, res) => {
-  await Task.findByIdAndUpdate({ _id: req.params.id }).exec((err, result) => {
-    result.name = req.body.name;
-    result.email = req.body.email;
-    result.phone = req.body.phone;
-    result.password = req.body.password;
-    result.save();
-    if (err) throw new Error("data is not update");
-    else res.json({ success: "true", message: "done", data: result });
-  });
+  await Task.findByIdAndUpdate(req.params.id, req.body);
+  console.log("user");
+  let err;
+  if (err) throw new Error("data is not update");
+  else res.json({ success: "true", message: "done" });
 });
 
 router.delete("/delete/:id", async (req, res) => {

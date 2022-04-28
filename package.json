@@ -2,9 +2,9 @@
   "name": "pratice",
   "version": "1.0.0",
   "description": "",
-  "main": "api.js",
+  "main": "index.js",
   "scripts": {
-    "api": "echo \"Error: no test specified\" && exit 1"
+    "index": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",

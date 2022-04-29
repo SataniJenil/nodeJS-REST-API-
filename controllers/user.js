@@ -1,10 +1,10 @@
 const Task = require("../models/user");
 var jwt = require("jsonwebtoken");
 var secret = "mouse";
-
+const mongoose = require("mongoose");
 exports.findData = async function (req, res) {
-  const user = await Task.find({});
   try {
+    const user = await Task.find({});
     res.json({
       success: true,
       message: "get details Successfully",
@@ -29,7 +29,7 @@ exports.loginData = async function (req, res) {
       });
     res.json({ success: true, message: "token is generate", token: token });
   } catch (err) {
-    console.log(err);
+    res.json({ success: false, message: err.message });
   }
 };
 
@@ -55,12 +55,15 @@ exports.updateData = async function (req, res) {
 
 exports.deleteData = async function (req, res) {
   try {
-    const user = await Task.findByIdAndDelete(req.params.id);
-    console.log(user, "user");
-    res
-      .status(200)
-      .json({ success: true, message: "id delete id success", data: user });
+    // var query = { users: mongoose.Types.ObjectId(req.params.user_id) };
+    // console.log("query", query);
+    const user = await Task.findById(req.params.id);
+    console.log(user, "boom");
+    if (!user) throw new Error("id is not found");
+    await Task.findByIdAndDelete(req.params.id);
+    res.status(200).json({ success: true, message: "id delete id success" });
   } catch (err) {
     console.log(err);
+    res.status(400).json({ success: false, message: err.message });
   }
 };

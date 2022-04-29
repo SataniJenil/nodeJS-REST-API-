@@ -59,6 +59,7 @@ exports.deleteData = async function (req, res) {
     console.log(user, "boom");
     if (!user) throw new Error("id is not found");
     const data = await Task.findByIdAndDelete(req.params.id);
+    console.log("data", data);
     res
       .status(200)
       .json({ success: true, message: "id delete id success", data: data });

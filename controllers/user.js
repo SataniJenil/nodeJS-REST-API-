@@ -41,16 +41,18 @@ exports.registerData = async function (req, res) {
     let createData = await Task.create(valid);
     createData && res.send({ success: true, message: "register is done" });
   } catch (err) {
-    res.json(err.message);
+    res.json({ message: err.message });
   }
 };
 
 exports.updateData = async function (req, res) {
-  await Task.findByIdAndUpdate(req.params.id, req.body);
-  console.log("user");
-  let err;
-  if (err) throw new Error("data is not update");
-  else res.json({ success: "true", message: "data is update" });
+  try {
+    await Task.findByIdAndUpdate(req.params.id, req.body);
+    console.log("user");
+    res.json({ success: "true", message: "data is update" });
+  } catch (error) {
+    ({ success: "false", message: error.message });
+  }
 };
 
 exports.deleteData = async function (req, res) {

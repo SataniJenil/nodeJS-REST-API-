@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const {
-  findId,
+  findUser,
   addData,
   updateData,
   deleteData,
@@ -10,7 +10,7 @@ const {
 
 router.get("/get", findData);
 
-router.get("/", findId);
+router.get("/oneId/:id", findUser);
 
 router.post("/create", addData);
 

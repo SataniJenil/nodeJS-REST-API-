@@ -55,13 +55,13 @@ exports.updateData = async function (req, res) {
 
 exports.deleteData = async function (req, res) {
   try {
-    // var query = { users: mongoose.Types.ObjectId(req.params.user_id) };
-    // console.log("query", query);
     const user = await Task.findById(req.params.id);
     console.log(user, "boom");
     if (!user) throw new Error("id is not found");
-    await Task.findByIdAndDelete(req.params.id);
-    res.status(200).json({ success: true, message: "id delete id success" });
+    const data = await Task.findByIdAndDelete(req.params.id);
+    res
+      .status(200)
+      .json({ success: true, message: "id delete id success", data: data });
   } catch (err) {
     console.log(err);
     res.status(400).json({ success: false, message: err.message });

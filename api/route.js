@@ -3,6 +3,12 @@ const app = express();
 const router = express.Router();
 const {
   findData,
+  matchId,
+  addFields,
+  size,
+  lookData,
+  newData,
+  projectId,
   loginData,
   registerData,
   updateData,
@@ -10,6 +16,18 @@ const {
 } = require("../controllers/user");
 
 router.get("/", findData);
+
+router.get("/match", matchId);
+
+router.get("/project", projectId);
+
+router.get("/addFields", addFields);
+
+router.get("/size", size);
+
+router.get("/look", lookData);
+
+router.get("/newLook", newData);
 
 router.post("/login", loginData);
 

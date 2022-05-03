@@ -6,7 +6,7 @@ const {
   matchId,
   addFields,
   size,
-  lookData,
+  multipleData,
   newData,
   twoData,
   combineData,
@@ -27,7 +27,7 @@ router.get("/addFields", addFields);
 
 router.get("/size", size);
 
-router.get("/look", lookData);
+router.get("/look", multipleData);
 
 router.get("/newLook", newData);
 

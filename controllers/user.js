@@ -21,7 +21,7 @@ exports.findData = async function (req, res) {
       data: user,
     });
   } catch (err) {
-    console.log(err);
+    res.json({ success: false, message: err.message });
   }
 };
 
@@ -46,16 +46,16 @@ exports.matchId = async function (req, res) {
   try {
     const user = await Task.aggregate([
       {
-        $match: {},
+        $match: { username: req.body.username },
       },
     ]);
+
     res.json({
       success: true,
       message: "get Successfully",
       data: user,
     });
   } catch (err) {
-    console.log(err);
     res.json({ success: false, message: err.message });
   }
 };
@@ -79,12 +79,9 @@ exports.addFields = async function (req, res) {
   }
 };
 
-exports.lookData = async (req, res) => {
+exports.multipleData = async (req, res) => {
   try {
     const data = await Todo.aggregate([
-      {
-        $match: { _id: mongoose.Types.ObjectId("626f6b421ad93ea5f351bf52") },
-      },
       {
         $lookup: {
           from: "tasks",
@@ -94,7 +91,6 @@ exports.lookData = async (req, res) => {
         },
       },
     ]);
-    console.log("work".length);
     res.json({ success: true, message: "done", data });
   } catch (error) {
     res.json({ success: false, message: error.message });
@@ -106,7 +102,7 @@ exports.newData = async (req, res) => {
     const data = await Task.aggregate([
       {
         $match: {
-          _id: mongoose.Types.ObjectId("626fabdaa25b57233c4ec557"),
+          _id: mongoose.Types.ObjectId(req.body.id),
         },
       },
       {
@@ -123,7 +119,6 @@ exports.newData = async (req, res) => {
         },
       },
     ]);
-    console.log("work");
     res.json({ success: true, message: "done", data });
   } catch (error) {
     res.json({ success: false, message: error.message });
@@ -202,10 +197,8 @@ exports.updateData = async function (req, res) {
 exports.deleteData = async function (req, res) {
   try {
     const user = await Task.findById(req.params.id);
-    console.log(user, "boom");
     if (!user) throw new Error("id is not found");
     const data = await Task.findByIdAndDelete(req.params.id);
-    console.log("data", data);
     res
       .status(200)
       .json({ success: true, message: "id delete id success", data });

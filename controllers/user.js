@@ -4,7 +4,10 @@ var secret = "mouse";
 const Todo = require("../models/todo");
 const { ObjectId } = require("mongodb");
 const mongoose = require("mongoose");
-const { registrationSchema } = require("../middleware/joi");
+const {
+  registrationSchema,
+  updateRegistrationSchema,
+} = require("../middleware/joi");
 exports.findData = async function (req, res) {
   try {
     const user = await Task.find({});
@@ -182,11 +185,16 @@ exports.registerData = async function (req, res) {
 
 exports.updateData = async function (req, res) {
   try {
-    await Task.findByIdAndUpdate(req.params.id, req.body);
-    console.log("user");
-    res.json({ success: "true", message: "data is update" });
-  } catch (error) {
-    ({ success: "false", message: error.message });
+    const user = await Task.findById(req.params.id);
+    console.log(user, "boom");
+    if (!user) throw new Error("id is not found");
+    let value = await updateRegistrationSchema.validateAsync(req.body);
+    console.log("error", value);
+    const data = await Task.findByIdAndUpdate(req.params.id, value);
+    console.log(data);
+    res.json({ success: true, message: "todo data is update", data });
+  } catch (err) {
+    res.json({ success: false, message: err.message });
   }
 };
 

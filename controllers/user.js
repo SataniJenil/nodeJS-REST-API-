@@ -51,6 +51,7 @@ exports.matchId = async function (req, res) {
       data: user,
     });
   } catch (err) {
+    console.log(err);
     res.json({ success: false, message: err.message });
   }
 };

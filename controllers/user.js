@@ -4,10 +4,14 @@ var secret = "mouse";
 const Todo = require("../models/todo");
 const { ObjectId } = require("mongodb");
 const mongoose = require("mongoose");
+
 const {
   registrationSchema,
   updateRegistrationSchema,
+  combineSchema,
+  combineRegistrationSchema,
 } = require("../middleware/joi");
+
 exports.findData = async function (req, res) {
   try {
     const user = await Task.find({});
@@ -175,7 +179,6 @@ exports.registerData = async function (req, res) {
     let emailExist = await Task.findOne({ email: req.body.email });
     if (emailExist) throw new Error("Email already exist");
     let value = await registrationSchema.validateAsync(req.body);
-    console.log("error", value);
     const valid = new Task(value);
     let createData = await Task.create(valid);
     createData && res.send({ success: true, message: "register is done" });
@@ -187,12 +190,9 @@ exports.registerData = async function (req, res) {
 exports.updateData = async function (req, res) {
   try {
     const user = await Task.findById(req.params.id);
-    console.log(user, "boom");
     if (!user) throw new Error("id is not found");
     let value = await updateRegistrationSchema.validateAsync(req.body);
-    console.log("error", value);
     const data = await Task.findByIdAndUpdate(req.params.id, value);
-    console.log(data);
     res.json({ success: true, message: "todo data is update", data });
   } catch (err) {
     res.json({ success: false, message: err.message });
@@ -212,5 +212,46 @@ exports.deleteData = async function (req, res) {
   } catch (err) {
     console.log(err);
     res.status(400).json({ success: false, message: err.message });
+  }
+};
+
+exports.combineData = async function (req, res) {
+  const id = req.body.id;
+  try {
+    if (id) {
+      let value = await combineRegistrationSchema.validateAsync(req.body);
+      const data = await Task.findByIdAndUpdate(id, req.body, value);
+      res.json({ success: true, message: "user data is update", data });
+    } else {
+      const value = await combineSchema.validateAsync(req.body);
+      let createData = await Task.create(value);
+      res.send({ success: true, message: "register is done", createData });
+    }
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
+};
+
+exports.twoData = async function (req, res) {
+  try {
+    const user = await Task.findOne({
+      username: req.body.username,
+    });
+    if (user) {
+      res.json({
+        success: true,
+        message: "get details Successfully",
+        user,
+      });
+    } else {
+      const data = await Task.find({});
+      res.json({
+        success: true,
+        message: "get details Successfully",
+        data,
+      });
+    }
+  } catch (err) {
+    res.json({ success: false, message: err.message });
   }
 };

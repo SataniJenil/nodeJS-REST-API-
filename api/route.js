@@ -8,6 +8,8 @@ const {
   size,
   lookData,
   newData,
+  twoData,
+  combineData,
   projectId,
   loginData,
   registerData,
@@ -29,7 +31,11 @@ router.get("/look", lookData);
 
 router.get("/newLook", newData);
 
+router.get("/combineData", twoData);
+
 router.post("/login", loginData);
+
+router.post("/combine", combineData);
 
 router.post("/register", registerData);
 

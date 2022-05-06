@@ -23,9 +23,6 @@ const {
   combineRegistrationSchema,
 } = require("../middleware/joi");
 const auth = require("../middleware/auth");
-
-router.get("/:id", auth, findData);
-
 router.get("/match", auth, matchId);
 
 router.get("/project", auth, projectId);
@@ -36,7 +33,7 @@ router.get("/size", auth, size);
 
 router.get("/look", auth, multipleData);
 
-router.get("/newLook", auth, newData);
+router.get("/custom", auth, newData);
 
 router.get("/combineData", auth, twoData);
 
@@ -49,5 +46,7 @@ router.post("/register", registrationSchema, registerData);
 router.put("/user/:id", auth, updateRegistrationSchema, updateData);
 
 router.delete("/delete/:id", auth, deleteData);
+
+router.get("/:id", auth, findData);
 
 module.exports = router;

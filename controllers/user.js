@@ -4,14 +4,14 @@ var secret = "mouse";
 const Todo = require("../models/todo");
 const mongoose = require("mongoose");
 const validation = require("../middleware/validation");
-
+const { ObjectId } = require("mongodb");
 exports.findData = async function (req, res) {
   try {
     const user = await Task.findById(req.params.id);
     res.json({
       success: true,
       message: "get details Successfully",
-      data: user,
+      user,
     });
   } catch (err) {
     res.json({ success: false, message: err.message });
@@ -28,7 +28,7 @@ exports.projectId = async function (req, res) {
     res.json({
       success: true,
       message: "get Successfully",
-      data: user,
+      user,
     });
   } catch (err) {
     res.json({ success: false, message: err.message });
@@ -46,7 +46,7 @@ exports.matchId = async function (req, res) {
     res.json({
       success: true,
       message: "get Successfully",
-      data: user,
+      user,
     });
   } catch (err) {
     res.json({ success: false, message: err.message });
@@ -112,8 +112,11 @@ exports.newData = async (req, res) => {
         },
       },
     ]);
+    console.log("API");
     res.json({ success: true, message: "done", data });
   } catch (error) {
+    console.log("error ", error);
+
     res.json({ success: false, message: error.message });
   }
 };
@@ -176,6 +179,7 @@ exports.registerData = async function (req, res) {
 exports.updateData = async function (req, res) {
   try {
     const data = await Task.findByIdAndUpdate(req.params.id, req.body);
+    if (!data) throw new Error("id is not found");
     res.json({ success: true, message: "todo data is update", data });
   } catch (err) {
     res.json({ success: false, message: err.message });
@@ -185,6 +189,7 @@ exports.updateData = async function (req, res) {
 exports.deleteData = async function (req, res) {
   try {
     const data = await Task.findByIdAndDelete(req.params.id);
+    if (!data) throw new Error("id is not found");
     res
       .status(200)
       .json({ success: true, message: "id delete id success", data });
@@ -210,24 +215,22 @@ exports.combineData = async function (req, res) {
 
 exports.twoData = async function (req, res) {
   try {
-    const user = await Task.findOne({
-      username: req.body.username,
-    });
-    if (user) {
-      res.json({
-        success: true,
-        message: "get details Successfully",
-        user,
-      });
-    } else {
-      const data = await Task.find({});
-      res.json({
-        success: true,
-        message: "get details Successfully",
-        data,
-      });
+    let data = {};
+    if (req.body.username) {
+      data = { ...data, username: req.body.username };
     }
-  } catch (err) {
-    res.json({ success: false, message: err.message });
+    if (req.body.email) {
+      data = { ...data, email: req.body.email };
+    }
+    if (req.body.mobilenumber) {
+      data = { ...data, mobilenumber: req.body.mobilenumber };
+    }
+    if (req.body.password) {
+      data = { ...data, password: req.body.password };
+    }
+    const all = await Task.find(data);
+    res.json({ success: true, message: "data is get", all });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
   }
 };

@@ -4,17 +4,11 @@ var secret = "mouse";
 const Todo = require("../models/todo");
 const { ObjectId } = require("mongodb");
 const mongoose = require("mongoose");
-
-const {
-  registrationSchema,
-  updateRegistrationSchema,
-  combineSchema,
-  combineRegistrationSchema,
-} = require("../middleware/joi");
+const validation = require("../middleware/validation");
 
 exports.findData = async function (req, res) {
   try {
-    const user = await Task.find({});
+    const user = await Task.findById(req.params.id);
     res.json({
       success: true,
       message: "get details Successfully",
@@ -160,7 +154,7 @@ exports.loginData = async function (req, res) {
         message: "user is not found",
       });
     } else
-      var token = jwt.sign({ email: user.email }, secret, {
+      var token = jwt.sign({ email: user.email, _id: user._id }, secret, {
         expiresIn: "1h",
       });
     res.json({ success: true, message: "token is generate", token: token });
@@ -173,10 +167,8 @@ exports.registerData = async function (req, res) {
   try {
     let emailExist = await Task.findOne({ email: req.body.email });
     if (emailExist) throw new Error("Email already exist");
-    let value = await registrationSchema.validateAsync(req.body);
-    const valid = new Task(value);
-    let createData = await Task.create(valid);
-    createData && res.send({ success: true, message: "register is done" });
+    let createData = await Task.create(req.body);
+    res.send({ success: true, message: "register is done", createData });
   } catch (err) {
     res.json({ success: false, message: err.message });
   }
@@ -184,10 +176,7 @@ exports.registerData = async function (req, res) {
 
 exports.updateData = async function (req, res) {
   try {
-    const user = await Task.findById(req.params.id);
-    if (!user) throw new Error("id is not found");
-    let value = await updateRegistrationSchema.validateAsync(req.body);
-    const data = await Task.findByIdAndUpdate(req.params.id, value);
+    const data = await Task.findByIdAndUpdate(req.params.id, req.body);
     res.json({ success: true, message: "todo data is update", data });
   } catch (err) {
     res.json({ success: false, message: err.message });
@@ -196,8 +185,6 @@ exports.updateData = async function (req, res) {
 
 exports.deleteData = async function (req, res) {
   try {
-    const user = await Task.findById(req.params.id);
-    if (!user) throw new Error("id is not found");
     const data = await Task.findByIdAndDelete(req.params.id);
     res
       .status(200)
@@ -212,12 +199,10 @@ exports.combineData = async function (req, res) {
   const id = req.body.id;
   try {
     if (id) {
-      let value = await combineRegistrationSchema.validateAsync(req.body);
-      const data = await Task.findByIdAndUpdate(id, req.body, value);
+      const data = await Task.findByIdAndUpdate(id, req.body);
       res.json({ success: true, message: "user data is update", data });
     } else {
-      const value = await combineSchema.validateAsync(req.body);
-      let createData = await Task.create(value);
+      let createData = await Task.create(req.body);
       res.send({ success: true, message: "register is done", createData });
     }
   } catch (error) {

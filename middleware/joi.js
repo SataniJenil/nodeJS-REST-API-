@@ -1,44 +1,71 @@
 const Joi = require("joi");
+const validationSchema = require("../middleware/validation");
 
-const registrationSchema = Joi.object({
-  username: Joi.string().alphanum().min(3).max(30).required(),
-  email: Joi.string().trim().email().required(),
-  password: Joi.string().min(5).max(10).required(),
-  mobilenumber: Joi.string().max(10).required(),
-});
+const registrationSchema = async (req, res, next) => {
+  const Schema = Joi.object({
+    username: Joi.string().min(3).max(30).required(),
+    email: Joi.string().email().required(),
+    password: Joi.string().min(5).max(10).required(),
+    mobilenumber: Joi.string().min(10).required(),
+  });
+  validationSchema(req, res, next, Schema);
+};
 
-const todoSchema = Joi.object({
-  Title: Joi.string().required(),
-  content: Joi.string().required(),
-  user_id: Joi.string().required(),
-});
+const todoSchema = async (req, res, next) => {
+  const Schema = Joi.object({
+    Title: Joi.string().required(),
+    content: Joi.string().required(),
+    user_id: Joi.string().required(),
+  });
+  validationSchema(req, res, next, Schema);
+};
 
-const updateSchema = Joi.object({
-  Title: Joi.string().required(),
-  content: Joi.string().required(),
-});
+const todoAddSchema = async (req, res, next) => {
+  const Schema = Joi.object({
+    Title: Joi.string().required(),
+    content: Joi.string().required(),
+  });
+  validationSchema(req, res, next, Schema);
+};
 
-const updateRegistrationSchema = Joi.object({
-  username: Joi.string().min(3).max(30).required(),
-  email: Joi.string().trim().email().required(),
-  password: Joi.string().min(5).max(10).required(),
-  mobilenumber: Joi.string().max(10).required(),
-});
+const updateSchema = async (req, res, next) => {
+  const Schema = Joi.object({
+    Title: Joi.string().required(),
+    content: Joi.string().required(),
+  });
+  validationSchema(req, res, next, Schema);
+};
 
-const combineSchema = Joi.object({
-  username: Joi.string().min(3).max(30).required(),
-  email: Joi.string().trim().email().required(),
-  password: Joi.string().min(5).max(10).required(),
-  mobilenumber: Joi.string().max(10).required(),
-});
+const updateRegistrationSchema = async (req, res, next) => {
+  const Schema = Joi.object({
+    username: Joi.string().min(3).max(30).required(),
+    email: Joi.string().trim().email().required(),
+    password: Joi.string().min(5).max(10).required(),
+    mobilenumber: Joi.string().min(10).required(),
+  });
+  validationSchema(req, res, next, Schema);
+};
 
-const combineRegistrationSchema = Joi.object({
-  username: Joi.string().min(3).max(30).required(),
-  email: Joi.string().trim().email().required(),
-  password: Joi.string().min(5).max(10).required(),
-  mobilenumber: Joi.string().max(10).required(),
-  id: Joi.string().required(),
-});
+const combineSchema = async (req, res, next) => {
+  const Schema = Joi.object({
+    username: Joi.string().min(3).max(30).required(),
+    email: Joi.string().trim().email().required(),
+    password: Joi.string().min(5).max(10).required(),
+    mobilenumber: Joi.string().max(10).required(),
+  }).unknown(true);
+  validationSchema(req, res, next, Schema);
+};
+
+const combineRegistrationSchema = async (req, res, next) => {
+  const Schema = Joi.object({
+    username: Joi.string().min(3).max(30).required(),
+    email: Joi.string().trim().email().required(),
+    password: Joi.string().min(5).max(10).required(),
+    mobilenumber: Joi.string().max(10).required(),
+    id: Joi.string().required(),
+  });
+  validationSchema(req, res, next, Schema);
+};
 
 module.exports = {
   registrationSchema,
@@ -47,4 +74,5 @@ module.exports = {
   updateRegistrationSchema,
   combineSchema,
   combineRegistrationSchema,
+  todoAddSchema,
 };

@@ -39,7 +39,7 @@ exports.matchId = async function (req, res) {
   try {
     const user = await Task.aggregate([
       {
-        $match: { username: req.body.username },
+        $match: { _id: mongoose.Types.ObjectId(req.body.id) },
       },
     ]);
 

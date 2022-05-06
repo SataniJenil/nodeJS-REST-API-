@@ -216,17 +216,17 @@ exports.combineData = async function (req, res) {
 exports.twoData = async function (req, res) {
   try {
     let data = {};
-    if (req.body.username) {
-      data = { ...data, username: req.body.username };
+    if (req.query.username) {
+      data = { ...data, username: req.query.username };
     }
-    if (req.body.email) {
-      data = { ...data, email: req.body.email };
+    if (req.query.email) {
+      data = { ...data, email: req.query.email };
     }
-    if (req.body.mobilenumber) {
-      data = { ...data, mobilenumber: req.body.mobilenumber };
+    if (req.query.mobilenumber) {
+      data = { ...data, mobilenumber: req.query.mobilenumber };
     }
-    if (req.body.password) {
-      data = { ...data, password: req.body.password };
+    if (req.query.password) {
+      data = { ...data, password: req.query.password };
     }
     const all = await Task.find(data);
     res.json({ success: true, message: "data is get", all });

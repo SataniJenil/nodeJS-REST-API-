@@ -2,7 +2,6 @@ const Task = require("../models/user");
 var jwt = require("jsonwebtoken");
 var secret = "mouse";
 const Todo = require("../models/todo");
-const { ObjectId } = require("mongodb");
 const mongoose = require("mongoose");
 const validation = require("../middleware/validation");
 
@@ -190,7 +189,6 @@ exports.deleteData = async function (req, res) {
       .status(200)
       .json({ success: true, message: "id delete id success", data });
   } catch (err) {
-    console.log(err);
     res.status(400).json({ success: false, message: err.message });
   }
 };

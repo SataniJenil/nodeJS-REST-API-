@@ -2,7 +2,7 @@ const Todo = require("../models/todo");
 
 exports.findData = async function (req, res) {
   try {
-    const user = await Todo.findById(req.params._id);
+    const user = await Todo.findById(req.params.id);
     res.json({
       success: true,
       message: "get details Successfully",

@@ -112,11 +112,8 @@ exports.newData = async (req, res) => {
         },
       },
     ]);
-    console.log("API");
     res.json({ success: true, message: "done", data });
   } catch (error) {
-    console.log("error ", error);
-
     res.json({ success: false, message: error.message });
   }
 };

@@ -1,9 +1,8 @@
 const Todo = require("../models/todo");
-const { todoSchema, updateSchema } = require("../middleware/joi");
 
 exports.findData = async function (req, res) {
   try {
-    const user = await Todo.find({});
+    const user = await Todo.findById(req.params.id);
     res.json({
       success: true,
       message: "get details Successfully",
@@ -31,12 +30,12 @@ exports.findUser = async function (req, res) {
 
 exports.addData = async function (req, res) {
   try {
-    let value = await todoSchema.validateAsync(req.body);
-    let createData = new Todo(value);
-    createData.save();
+    const createData = { ...req.body, user_id: req.user._id };
+    await Todo.create(createData);
     res.json({
       success: true,
       message: "Todo Data add is success",
+      createData,
     });
   } catch (err) {
     res.json({ success: false, message: err.message });
@@ -45,10 +44,8 @@ exports.addData = async function (req, res) {
 
 exports.updateData = async function (req, res) {
   try {
-    const user = await Todo.findById(req.params.id);
-    if (!user) throw new Error("id is not found");
-    let value = await updateSchema.validateAsync(req.body);
-    const data = await Todo.findByIdAndUpdate(req.params.id, value);
+    const data = await Todo.findByIdAndUpdate(req.params.id, req.body);
+    if (!data) throw new Error("id is not found");
     res.json({ success: true, message: "todo data is update", data });
   } catch (err) {
     res.json({ success: false, message: err.message });
@@ -57,9 +54,8 @@ exports.updateData = async function (req, res) {
 
 exports.deleteData = async function (req, res) {
   try {
-    const data = await Todo.findById(req.params.id);
-    if (!data) throw new Error("id is not found");
     const id = await Todo.findByIdAndDelete(req.params.id);
+    if (!id) throw new Error("id is not found");
     res
       .status(200)
       .json({ success: true, message: "id delete id success", id });

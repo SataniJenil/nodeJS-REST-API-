@@ -16,31 +16,37 @@ const {
   updateData,
   deleteData,
 } = require("../controllers/user");
+const {
+  registrationSchema,
+  updateRegistrationSchema,
+  combineSchema,
+  combineRegistrationSchema,
+} = require("../middleware/joi");
+const auth = require("../middleware/auth");
+router.get("/match", auth, matchId);
 
-router.get("/", findData);
+router.get("/project", auth, projectId);
 
-router.get("/match", matchId);
+router.get("/addFields", auth, addFields);
 
-router.get("/project", projectId);
+router.get("/size", auth, size);
 
-router.get("/addFields", addFields);
+router.get("/look", auth, multipleData);
 
-router.get("/size", size);
+router.get("/custom", auth, newData);
 
-router.get("/look", multipleData);
-
-router.get("/newLook", newData);
-
-router.get("/combineData", twoData);
+router.get("/combineData", auth, twoData);
 
 router.post("/login", loginData);
 
-router.post("/combine", combineData);
+router.post("/combine", auth, combineSchema, combineData);
 
-router.post("/register", registerData);
+router.post("/register", registrationSchema, registerData);
 
-router.put("/user/:id", updateData);
+router.put("/user/:id", auth, updateRegistrationSchema, updateData);
 
-router.delete("/delete/:id", deleteData);
+router.delete("/delete/:id", auth, deleteData);
+
+router.get("/:id", auth, findData);
 
 module.exports = router;

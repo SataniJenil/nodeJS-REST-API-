@@ -17,6 +17,13 @@ const dataSchema = mongoose.Schema({
     type: String,
     require: true,
   },
+  Image: {
+    type: String,
+    require: true,
+  },
+  Image_url: {
+    type: String,
+  },
 });
 const Task = mongoose.model("Task", dataSchema);
 module.exports = Task;

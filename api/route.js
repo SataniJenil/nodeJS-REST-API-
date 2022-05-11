@@ -15,6 +15,7 @@ const {
   registerData,
   updateData,
   deleteData,
+  csvController,
 } = require("../controllers/user");
 const {
   registrationSchema,
@@ -23,6 +24,7 @@ const {
   combineRegistrationSchema,
 } = require("../middleware/joi");
 const auth = require("../middleware/auth");
+const upload = require("../middleware/upload");
 router.get("/match", auth, matchId);
 
 router.get("/project", auth, projectId);
@@ -39,9 +41,11 @@ router.get("/combineData", auth, twoData);
 
 router.post("/login", loginData);
 
-router.post("/combine", auth, combineSchema, combineData);
-
 router.post("/register", registrationSchema, registerData);
+
+router.post("/upload", upload, csvController);
+
+router.post("/combine", auth, combineSchema, combineData);
 
 router.put("/user/:id", auth, updateRegistrationSchema, updateData);
 

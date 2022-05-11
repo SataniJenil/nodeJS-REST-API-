@@ -11,7 +11,7 @@ const {
   findData,
 } = require("../controllers/todo");
 
-router.get("/get/:id", auth, findData);
+router.get("/get", auth, findData);
 
 router.get("/oneId/:id", auth, findUser);
 

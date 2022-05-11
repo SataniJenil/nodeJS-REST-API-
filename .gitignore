@@ -8,6 +8,7 @@ dist/
 .env
 yarn.lock
 package-lock.json
+logs/
 # Compiled Java class files
 *.class
 # Compiled Python bytecode

@@ -189,7 +189,6 @@ exports.loginData = async function (req, res) {
 exports.registerData = async function (req, res) {
   try {
     infoLogger.info(req.body);
-
     let emailExist = await Task.findOne({ email: req.body.email });
     if (emailExist) throw new Error("Email already exist");
     let createData = await Task.create(req.body);

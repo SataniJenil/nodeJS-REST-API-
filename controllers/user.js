@@ -9,7 +9,6 @@ const fs = require("fs");
 const path = require("path");
 const __basedir = path.resolve();
 const csv = require("csv-parser");
-const fastCsv = require("fast-csv");
 const employee = require("../models/employee");
 
 exports.findData = async function (req, res) {
@@ -207,33 +206,25 @@ exports.csvController = async (req, res) => {
     if (req.file == undefined) {
       return res.status(400).send("Please upload a CSV file!");
     }
-    const options = {
-      objectMode: true,
-      delimiter: ",",
-      quote: null,
-      headers: true,
-      renameHeaders: false,
-    };
-    const readableStream = fs.createReadStream(
-      __basedir + "/imageStore/" + req.file.filename
-    );
+
+    const readableStream = __basedir + "/imageStore/" + req.file.filename;
     let Tutorial = [];
 
-    // let path = __basedir + "/imageStore/" + req.file.filename;
-    // console.log("path", path);
-
-    fastCsv
-      .parseStream(readableStream, options)
+    fs.createReadStream(readableStream)
+      .pipe(csv())
       .on("error", (error) => {
         console.log(error);
       })
       .on("data", (row) => {
         Tutorial.push(row);
       })
-      .on("end", (rowCount) => {
-        console.log(rowCount);
-        console.log(Tutorial);
+      .on("end", () => {
         employee.insertMany(Tutorial);
+        console.log("hie");
+        fs.unlink(readableStream, function (err) {
+          if (err) throw err;
+          console.log("file deleted");
+        });
       });
   } catch (error) {
     console.log(error);

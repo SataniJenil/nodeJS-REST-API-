@@ -8,6 +8,7 @@ const { infoLogger, errorLogger } = require("../logger");
 const auth = async (req, res, next) => {
   try {
     infoLogger.info(req.decoded);
+
     const token = req.header("Authorization").replace("Bearer", "").trim();
     if (!token) throw new Error("token is not Authorization");
 

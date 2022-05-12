@@ -1,20 +1,14 @@
 const multer = require("multer");
-const csvFilter = (req, file, cb) => {
-  if (file.mimetype.includes("csv")) {
-    cb(null, true);
-  } else {
-    cb("Please upload only csv file.", false);
-  }
-};
+var path = require("path");
+
 var storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "imageStore/");
   },
   filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-bezkoder-${file.originalname}`);
+    console.log("file", file);
+    cb(null, Date.now() + path.extname(file.originalname));
   },
 });
-var uploadFile = multer({ storage: storage, fileFilter: csvFilter }).single(
-  "Image"
-);
+var uploadFile = multer({ storage: storage }).single("Image");
 module.exports = uploadFile;

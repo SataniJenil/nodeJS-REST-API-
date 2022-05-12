@@ -5,7 +5,6 @@ const registrationSchema = async (req, res, next) => {
   const Schema = Joi.object({
     username: Joi.string().min(3).max(30).required(),
     email: Joi.string().email().required(),
-    password: Joi.string().min(5).max(10).required(),
     mobilenumber: Joi.string().min(10).required(),
   });
   validationSchema(req, res, next, Schema);

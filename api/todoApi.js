@@ -1,15 +1,15 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const auth = require("../middleware/auth");
-const { todoAddSchema, updateSchema } = require("../middleware/joi");
+import auth from "../middleware/auth";
+import { todoAddSchema, updateSchema } from "../middleware/joi";
 
-const {
+import {
   findUser,
   addData,
   updateData,
   deleteData,
   findData,
-} = require("../controllers/todo");
+} from "../controllers/todo";
 
 router.get("/get", auth, findData);
 
@@ -21,4 +21,4 @@ router.put("/:id", auth, updateSchema, updateData);
 
 router.delete("/:id", auth, deleteData);
 
-module.exports = router;
+export default router;

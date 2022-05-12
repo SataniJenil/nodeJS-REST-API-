@@ -1,7 +1,6 @@
-const express = require("express");
-const app = express();
+import express from "express";
 const router = express.Router();
-const {
+import {
   findData,
   matchId,
   addFields,
@@ -18,15 +17,16 @@ const {
   csvController,
   imageUpload,
   nodeMailer,
-} = require("../controllers/user");
-const {
+} from "../controllers/user";
+import {
   registrationSchema,
   updateRegistrationSchema,
   combineSchema,
   combineRegistrationSchema,
-} = require("../middleware/joi");
-const auth = require("../middleware/auth");
-const upload = require("../middleware/upload");
+} from "../middleware/joi";
+import auth from "../middleware/auth";
+import upload from "../middleware/upload";
+
 router.get("/match", auth, matchId);
 
 router.get("/project", auth, projectId);
@@ -57,4 +57,4 @@ router.delete("/delete/:id", auth, deleteData);
 
 router.get("/:id", auth, findData);
 
-module.exports = router;
+export default router;

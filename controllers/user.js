@@ -1,23 +1,23 @@
-const Task = require("../models/user");
-var jwt = require("jsonwebtoken");
+import Task from "../models/user";
+import jwt from "jsonwebtoken";
 require("dotenv").config();
-var secret = process.env.SECRET;
-const Todo = require("../models/todo");
-const mongoose = require("mongoose");
-const { infoLogger, errorLogger } = require("../logger");
-const fs = require("fs");
-const path = require("path");
+import Todo from "../models/todo";
+import mongoose from "mongoose";
+import { infoLogger, errorLogger } from "../logger";
+import fs from "fs";
+import path from "path";
 const __basedir = path.resolve();
-const csv = require("csv-parser");
-const employee = require("../models/employee");
-var nodemailer = require("nodemailer");
-var generator = require("generate-password");
+import csv from "csv-parser";
+import employee from "../models/employee";
+import nodemailer from "nodemailer";
+import generator from "generate-password";
 require("dotenv").config();
 let email = process.env.EMAIL;
 let pw = process.env.PASS;
-const upload = require("../middleware/upload");
+var secret = process.env.SECRET;
+import upload from "../middleware/upload";
 
-exports.findData = async function (req, res) {
+const findData = async (req, res) => {
   try {
     infoLogger.info(req.params);
     const user = await Task.findById(req.params.id);
@@ -33,7 +33,7 @@ exports.findData = async function (req, res) {
   }
 };
 
-exports.projectId = async function (req, res) {
+const projectId = async (req, res) => {
   try {
     const user = await Task.aggregate([
       {
@@ -52,7 +52,7 @@ exports.projectId = async function (req, res) {
   }
 };
 
-exports.matchId = async function (req, res) {
+const matchId = async (req, res) => {
   try {
     infoLogger.info(req.body);
     const user = await Task.aggregate([
@@ -72,7 +72,7 @@ exports.matchId = async function (req, res) {
   }
 };
 
-exports.addFields = async function (req, res) {
+const addFields = async (req, res) => {
   try {
     const user = await Task.aggregate([
       {
@@ -94,7 +94,7 @@ exports.addFields = async function (req, res) {
   }
 };
 
-exports.multipleData = async (req, res) => {
+const multipleData = async (req, res) => {
   try {
     const data = await Todo.aggregate([
       {
@@ -115,7 +115,7 @@ exports.multipleData = async (req, res) => {
   }
 };
 
-exports.newData = async (req, res) => {
+const newData = async (req, res) => {
   try {
     infoLogger.info(req.body);
     const data = await Task.aggregate([
@@ -145,7 +145,7 @@ exports.newData = async (req, res) => {
   }
 };
 
-exports.size = async function (req, res) {
+const size = async (req, res) => {
   try {
     const user = await Task.aggregate([
       {
@@ -172,7 +172,7 @@ exports.size = async function (req, res) {
   }
 };
 
-exports.loginData = async function (req, res) {
+const loginData = async (req, res) => {
   try {
     infoLogger.info(req.body);
     const user = await Task.findOne({ email: req.body.email });
@@ -192,7 +192,7 @@ exports.loginData = async function (req, res) {
   }
 };
 
-exports.registerData = async function (req, res) {
+const registerData = async (req, res) => {
   try {
     infoLogger.info(req.body);
     let emailExist = await Task.findOne({ email: req.body.email });
@@ -239,7 +239,7 @@ exports.registerData = async function (req, res) {
   }
 };
 
-exports.csvController = async (req, res) => {
+const csvController = async (req, res) => {
   try {
     if (req.file == undefined) {
       return res.status(400).send("Please upload a CSV file!");
@@ -272,7 +272,7 @@ exports.csvController = async (req, res) => {
   }
 };
 
-exports.imageUpload = async (req, res) => {
+const imageUpload = async (req, res) => {
   upload(req, res, async function (err, data) {
     try {
       console.log("err", err);
@@ -287,7 +287,7 @@ exports.imageUpload = async (req, res) => {
   });
 };
 
-exports.updateData = async function (req, res) {
+const updateData = async (req, res) => {
   try {
     infoLogger.info(req.params, req.body);
     const data = await Task.findByIdAndUpdate(req.params.id, req.body);
@@ -299,7 +299,7 @@ exports.updateData = async function (req, res) {
   }
 };
 
-exports.deleteData = async function (req, res) {
+const deleteData = async (req, res) => {
   try {
     let id = req.params.id ? undefined : "";
     if (!id) throw new Error("Enter A valid ID");
@@ -315,7 +315,7 @@ exports.deleteData = async function (req, res) {
   }
 };
 
-exports.combineData = async function (req, res) {
+const combineData = async (req, res) => {
   const id = req.body.id;
   try {
     infoLogger.info(id, req.body);
@@ -332,7 +332,7 @@ exports.combineData = async function (req, res) {
   }
 };
 
-exports.twoData = async function (req, res) {
+const twoData = async (req, res) => {
   try {
     infoLogger.info(req.query);
     let data = {};
@@ -354,4 +354,22 @@ exports.twoData = async function (req, res) {
     errorLogger.error(error.message);
     res.json({ success: false, message: error.message });
   }
+};
+
+export {
+  findData,
+  projectId,
+  matchId,
+  addFields,
+  multipleData,
+  newData,
+  size,
+  loginData,
+  registerData,
+  csvController,
+  imageUpload,
+  updateData,
+  deleteData,
+  combineData,
+  twoData,
 };

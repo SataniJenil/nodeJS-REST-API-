@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon --exec babel-node index.js",
     "index": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -25,5 +26,11 @@
     "nodemon": "^2.0.15",
     "winston": "^3.7.2",
     "winston-daily-rotate-file": "^4.6.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.17.10",
+    "@babel/core": "^7.17.10",
+    "@babel/node": "^7.17.10",
+    "@babel/preset-env": "^7.17.10"
   }
 }

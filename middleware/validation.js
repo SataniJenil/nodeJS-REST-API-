@@ -1,6 +1,6 @@
-const { infoLogger, errorLogger } = require("../logger");
+import { infoLogger, errorLogger } from "../logger";
 
-module.exports = async (req, res, next, Schema) => {
+export default async (req, res, next, Schema) => {
   try {
     infoLogger.info(req.body);
     const value = await Schema.validateAsync(req.body);

@@ -1,6 +1,7 @@
-const Todo = require("../models/todo");
-const { infoLogger, errorLogger } = require("../logger");
-exports.findData = async function (req, res) {
+import Todo from "../models/todo";
+import { infoLogger, errorLogger } from "../logger";
+
+const findData = async (req, res) => {
   try {
     infoLogger.info(req.params);
     const user = await Todo.find({});
@@ -14,7 +15,7 @@ exports.findData = async function (req, res) {
   }
 };
 
-exports.findUser = async function (req, res) {
+const findUser = async (req, res) => {
   try {
     infoLogger.info(req.params);
     const data = await Todo.findById(req.params.id);
@@ -31,7 +32,7 @@ exports.findUser = async function (req, res) {
   }
 };
 
-exports.addData = async function (req, res) {
+const addData = async (req, res) => {
   try {
     infoLogger.info(req.user, req.body);
     const createData = { ...req.body, user_id: req.user._id };
@@ -47,7 +48,7 @@ exports.addData = async function (req, res) {
   }
 };
 
-exports.updateData = async function (req, res) {
+const updateData = async (req, res) => {
   try {
     infoLogger.info(req.params, req.body);
     const data = await Todo.findByIdAndUpdate(req.params.id, req.body);
@@ -59,7 +60,7 @@ exports.updateData = async function (req, res) {
   }
 };
 
-exports.deleteData = async function (req, res) {
+const deleteData = async (req, res) => {
   try {
     infoLogger.info(req.params);
     const id = await Todo.findByIdAndDelete(req.params.id);
@@ -72,3 +73,5 @@ exports.deleteData = async function (req, res) {
     res.json({ success: false, message: err.message });
   }
 };
+
+export { findData, findUser, addData, updateData, deleteData };

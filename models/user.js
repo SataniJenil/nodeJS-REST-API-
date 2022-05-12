@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 const dataSchema = mongoose.Schema({
   username: {
     type: String,
@@ -23,4 +23,5 @@ const dataSchema = mongoose.Schema({
   },
 });
 const Task = mongoose.model("Task", dataSchema);
-module.exports = Task;
+
+export default Task;

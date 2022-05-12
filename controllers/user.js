@@ -10,6 +10,12 @@ const path = require("path");
 const __basedir = path.resolve();
 const csv = require("csv-parser");
 const employee = require("../models/employee");
+var nodemailer = require("nodemailer");
+var generator = require("generate-password");
+require("dotenv").config();
+let email = process.env.EMAIL;
+let pw = process.env.PASS;
+const upload = require("../middleware/upload");
 
 exports.findData = async function (req, res) {
   try {
@@ -191,7 +197,40 @@ exports.registerData = async function (req, res) {
     infoLogger.info(req.body);
     let emailExist = await Task.findOne({ email: req.body.email });
     if (emailExist) throw new Error("Email already exist");
-    let createData = await Task.create(req.body);
+    var password = generator.generate({
+      length: 10,
+      numbers: true,
+    });
+    console.log("password", password);
+    let createData = await Task.create({ ...req.body, password });
+
+    let transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
+      service: "gmail",
+      auth: {
+        user: email,
+        pass: pw,
+      },
+      tls: {
+        rejectUnauthorized: false,
+      },
+    });
+    console.log("transporter", transporter);
+    let mailOptions = {
+      from: email,
+      to: req.body.email,
+      subject: "password verification mail",
+      html: `<p>use this password for signup"<br/>  ${password} </p>`,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        return console.log(error);
+      }
+      res.render("contact", { msg: "Email has been sent" });
+    });
     res.send({ success: true, message: "register is done", createData });
   } catch (err) {
     errorLogger.error(err.message);
@@ -231,6 +270,21 @@ exports.csvController = async (req, res) => {
       message: "Could not upload the file: " + req.file.originalname,
     });
   }
+};
+
+exports.imageUpload = async (req, res) => {
+  upload(req, res, async function (err, data) {
+    try {
+      console.log("err", err);
+      console.log("data", data);
+      let user = await Task.create({ ...req.body, Image: req.file.filename });
+      res.status(200).json({ success: true, message: "file is upload ", user });
+    } catch (error) {
+      res
+        .status(401)
+        .json({ success: false, message: "Enter a Right details" });
+    }
+  });
 };
 
 exports.updateData = async function (req, res) {

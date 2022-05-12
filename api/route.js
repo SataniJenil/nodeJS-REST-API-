@@ -16,6 +16,8 @@ const {
   updateData,
   deleteData,
   csvController,
+  imageUpload,
+  nodeMailer,
 } = require("../controllers/user");
 const {
   registrationSchema,
@@ -44,6 +46,8 @@ router.post("/login", loginData);
 router.post("/register", registrationSchema, registerData);
 
 router.post("/upload", upload, csvController);
+
+router.post("/image", imageUpload);
 
 router.post("/combine", auth, combineSchema, combineData);
 

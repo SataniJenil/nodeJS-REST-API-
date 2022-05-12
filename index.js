@@ -1,10 +1,10 @@
-const express = require("express");
+import express from "express";
 const app = express();
-const mongoose = require("mongoose");
-const api = require("./api/route");
-const todo = require("./api/todoApi");
-const employee = require("./models/employee");
-const bodyParser = require("body-parser");
+import mongoose from "mongoose";
+import api from "./api/route";
+import todo from "./api/todoApi";
+import employee from "./models/employee";
+import bodyParser from "body-parser";
 require("dotenv").config();
 let port = process.env.PORT;
 let host = process.env.HOST;

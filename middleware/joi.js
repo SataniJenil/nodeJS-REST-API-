@@ -1,5 +1,5 @@
-const Joi = require("joi");
-const validationSchema = require("../middleware/validation");
+import Joi from "joi";
+import validationSchema from "../middleware/validation";
 
 const registrationSchema = async (req, res, next) => {
   const Schema = Joi.object({
@@ -66,7 +66,7 @@ const combineRegistrationSchema = async (req, res, next) => {
   validationSchema(req, res, next, Schema);
 };
 
-module.exports = {
+export {
   registrationSchema,
   todoSchema,
   updateSchema,

@@ -1,4 +1,4 @@
-const winston = require("winston");
+import winston from "winston";
 require("dotenv").config();
 const file = process.env.FOLDER;
 var regex = /\//g;
